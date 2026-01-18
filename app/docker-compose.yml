@@ -1,0 +1,28 @@
+services:
+  fastapi-backend:
+    build: .
+    restart: unless-stopped
+    volumes:
+      - ./:/app
+    environment:
+      PYTHONPATH: /app
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      GROQ_API_KEY: ${GROQ_API_KEY}
+      MILVUS_URI: ${MILVUS_URI}
+      MILVUS_TOKEN: ${MILVUS_TOKEN}
+    ports:
+      - "8080:8080"
+    command:
+      [
+        "uv",
+        "run",
+        "python",
+        "-m",
+        "uvicorn",
+        "main:app",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8080",
+        "--reload",
+      ]

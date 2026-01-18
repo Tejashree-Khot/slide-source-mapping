@@ -1,5 +1,5 @@
 [project]
-name = "slite-source-mapping"
+name = "slide-source-mapping"
 version = "0.1.0"
 description = "Slide source mapping"
 readme = "README.md"
@@ -22,13 +22,11 @@ slide-source-mapping-app = { workspace = true }
 dev = [
     "slide-source-mapping-app",
     "coverage",
-    "moto",
     "mypy",
+    "pytest",
     "pytest-cov",
     "pytest-xdist",
-    "pytest",
     "ruff",
-    "streamlit",
     "types-requests",
 ]
 

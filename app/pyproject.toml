@@ -1,22 +1,23 @@
 [project]
 name = "slide-source-mapping-app"
 version = "0.1.0"
-description = "Slide source mapping"
+description = "Slides Source Mapping"
 requires-python = ">=3.13"
 dependencies = [
     "asyncpg",
     "fastapi",
+    "langchain",
+    "langchain-community",
     "langchain-core",
-    "langchain-groq",
-    "langchain-openai",
-    "langgraph",
-    "langgraph-checkpoint-postgres",
+    "langchain_groq",
+    "langchain_google_genai",
+    "langchain-milvus",
+    "milvus-lite",
     "nest-asyncio",
-    "psycopg[binary,pool]",
     "pydantic-settings",
+    "pymilvus",
+    "pypdf",
     "python-dotenv",
-    "trustcall",
-    "datasets",
     "uvicorn"
 ]
 
@@ -26,5 +27,5 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["agent", "config", "core", "memory", "service"]
+include = ["config", "core", "memory", "rag", "service", "utils"]
 exclude = ["test"]
