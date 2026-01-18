@@ -2,11 +2,12 @@ import logging
 from typing import Annotated
 
 from fastapi import APIRouter, Depends
-from fastapi.responses import Response
+from fastapi.responses import JSONResponse, Response
 
-from app.dependencies import get_ingester
+from app.dependencies import get_ingester, get_retriever
 from app.ingester import Ingester
-from config.schemas import PDFInput
+from app.retriever import Retriever
+from config.schemas import PDFInput, RetrieveInput, RetrieveOutput
 
 router = APIRouter()
 LOGGER = logging.getLogger("service")
@@ -26,3 +27,12 @@ async def ingest(
     """Ingest sources for a bullet point."""
     await ingester.aingest(request)
     return Response(content="OK", status_code=200)
+
+
+@router.post("/retrieve", response_model=RetrieveOutput)
+async def retrieve(
+    request: RetrieveInput, retriever: Annotated[Retriever, Depends(get_retriever)]
+) -> JSONResponse:
+    """Retrieve sources for a bullet point."""
+    result = await retriever.aretrieve(request.query_texts)
+    return JSONResponse(content=result)

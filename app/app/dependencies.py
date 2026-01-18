@@ -3,6 +3,7 @@
 from functools import lru_cache
 
 from app.ingester import Ingester
+from app.retriever import Retriever
 from core.embedder import EmbeddingClient
 from memory.milvus_manager import MilvusManager, create_milvus_manager
 
@@ -32,3 +33,12 @@ def get_ingester() -> Ingester:
     :return: The singleton Ingester instance.
     """
     return Ingester(get_milvus_manager(), get_embedding_client())
+
+
+@lru_cache
+def get_retriever() -> Retriever:
+    """Get or create the singleton Retriever instance.
+
+    :return: The singleton Retriever instance.
+    """
+    return Retriever(get_milvus_manager(), get_embedding_client())
