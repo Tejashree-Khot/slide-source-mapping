@@ -4,7 +4,9 @@ from functools import lru_cache
 
 from app.ingester import Ingester
 from app.retriever import Retriever
+from app.summarizer import Summarizer
 from core.embedder import EmbeddingClient
+from core.llm import LLMClient
 from memory.milvus_manager import MilvusManager, create_milvus_manager
 
 
@@ -42,3 +44,21 @@ def get_retriever() -> Retriever:
     :return: The singleton Retriever instance.
     """
     return Retriever(get_milvus_manager(), get_embedding_client())
+
+
+@lru_cache
+def get_llm_client() -> LLMClient:
+    """Get or create the singleton LLMClient instance.
+
+    :return: The singleton LLMClient instance.
+    """
+    return LLMClient()
+
+
+@lru_cache
+def get_summarizer() -> Summarizer:
+    """Get or create the singleton Summarizer instance.
+
+    :return: The singleton Summarizer instance.
+    """
+    return Summarizer(get_llm_client())

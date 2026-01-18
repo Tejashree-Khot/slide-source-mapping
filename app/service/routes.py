@@ -4,10 +4,11 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse, Response
 
-from app.dependencies import get_ingester, get_retriever
+from app.dependencies import get_ingester, get_retriever, get_summarizer
 from app.ingester import Ingester
 from app.retriever import Retriever
-from config.schemas import PDFInput, RetrieveInput, RetrieveOutput
+from app.summarizer import Summarizer
+from config.schemas import PDFInput, RetrieveInput, RetrieveOutput, SummarizeInput, SummarizeOutput
 
 router = APIRouter()
 LOGGER = logging.getLogger("service")
@@ -35,4 +36,13 @@ async def retrieve(
 ) -> JSONResponse:
     """Retrieve sources for a bullet point."""
     result = await retriever.aretrieve(request.query_texts)
+    return JSONResponse(content=result)
+
+
+@router.post("/summarize", response_model=SummarizeOutput)
+async def summarize(
+    request: SummarizeInput, summarizer: Annotated[Summarizer, Depends(get_summarizer)]
+) -> JSONResponse:
+    """Generate slide summaries from user input."""
+    result = await summarizer.summarize(request)
     return JSONResponse(content=result)

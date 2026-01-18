@@ -43,6 +43,13 @@ class PDFProcessor:
             tmp.write(pdf_bytes)
             return Path(tmp.name)
 
+    def parse_pdf_base64(self, base64_data: str) -> str:
+        """Parse PDF from base64 data."""
+        tmp_path = self.save_pdf(base64_data)
+        docs = self.load(tmp_path)
+        text = "\n\n".join([doc.page_content for doc in docs])
+        return text
+
     def load(self, file_path: Path) -> list[Document]:
         """Loads PDF and returns list of documents."""
         loader = PyPDFLoader(file_path)
