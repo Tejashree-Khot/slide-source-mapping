@@ -10,9 +10,9 @@ APP_PATH = Path(__file__).parent.parent / "app"
 load_dotenv(APP_PATH / ".env")
 sys.path.append(str(APP_PATH))
 
-from core.embedder import EmbeddingClient
-from memory.milvus_manager import MilvusManager, create_milvus_manager
-from utils.pdf_processor import PDFProcessor
+from app.core.embedder import EmbeddingClient
+from app.memory.milvus_manager import MilvusManager, create_milvus_manager
+from app.utils.pdf_processor import PDFProcessor
 
 
 async def execute_similarity_search(
@@ -43,7 +43,11 @@ async def ingest_pdf(
 
 def main():
     embedding_client = EmbeddingClient()
-    milvus_manager = create_milvus_manager()
+    try:
+        milvus_manager = create_milvus_manager()
+    except ConnectionError as e:
+        print(e, file=sys.stderr)
+        sys.exit(1)
 
     sample_pdf_path = Path(__file__).parent.parent / "assets" / "sample.pdf"
     asyncio.run(ingest_pdf(sample_pdf_path, embedding_client, milvus_manager))
